@@ -1,3 +1,4 @@
+
 from tabnanny import verbose
 from django.db import models
 
@@ -22,7 +23,14 @@ class Emprendimiento(models.Model):
     altitud = models.CharField(verbose_name="Altitud", max_length=20)
     latitud = models.CharField(verbose_name="Latitud", max_length=20)
     foto = models.ImageField(upload_to = "fotos_local", verbose_name = "Logo", null = True, blank = True)
+    video = models.URLField(verbose_name="Video Promocional", null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Emprendimiento"
+        verbose_name_plural = "Emprendimientos"
+
+    def __str__(self) -> str:
+        return self.tipo_emprendimiento + self.empresa
 
 class Producto(models.Model):
     nombre_producto = models.CharField(verbose_name="Nombre del Producto", max_length=100)
@@ -51,23 +59,39 @@ class Persona(models.Model):
     pais_origen = models.CharField(verbose_name="País de origen", max_length=200)
     foto = models.ImageField(upload_to = "fotos_usuarios", verbose_name = "Foto de Perfil", null = True, blank = True)
 
+
+
     # metodo para presentar el objeto creado
     def __str__(self):
         return self.cedula
 
+    
+
 
 class Cliente(Persona):
-    pass
+
+    class Meta:
+        verbose_name = "Cliente"
+        verbose_name_plural = "Clientes"
 
 
-class Adminstrador(Persona):
+class Administrador(Persona):
     fecha_inicio = models.DateTimeField()
     fecha_actualizacion = models.DateTimeField()
     estado = models.BooleanField()
 
+    class Meta:
+        verbose_name = "Administrador"
+        verbose_name_plural = "Administradores"
+
 
 class Emprendedor(Persona):
-    pass
+
+    emprendimientos = models.ManyToManyField(Emprendimiento, blank=True, null=True)
+    
+    class Meta:
+        verbose_name = "Emprendedor"
+        verbose_name_plural = "Emprendedores"
 
 
 
